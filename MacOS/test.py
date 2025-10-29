@@ -1,0 +1,45 @@
+import subprocess
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+def parse_result(path):
+    if not path.exists():
+        print(f"{str(path)} not found")
+    else:
+        tree = ET.parse(path)
+        root = tree.getroot()
+
+        result = str(root.attrib.get("result", 0))
+        testcasecount = int(root.attrib.get("testcasecount", 0))
+        passed = int(root.attrib.get("passed", 0))
+        failed = int(root.attrib.get("failed", 0))
+        skipped = int(root.attrib.get("skipped", 0))
+        duration = float(root.attrib.get("duration", 0.0))
+
+        print(f"File: {path}")
+        print(f"Result: {result}")
+        print(f"Test Cases: {testcasecount}")
+        print(f"Passed: {passed}")
+        print(f"Failed: {failed}")
+        print(f"Skipped: {skipped}")
+        print(f"Duration: {duration:.2f}s")
+
+        for test in root.iter("test-case"):
+            if test.attrib.get("result") == "Failed":
+                print("Failed test:", test.attrib.get("fullname", "(unknown)"))
+
+result = subprocess.run(
+    ["/usr/bin/env", "bash", "test"],
+    capture_output=True,
+    # check=True,
+    text=True
+)
+
+if result.returncode == 0:
+    print("tests ran successfully\n")
+    print("Play Mode Tests: \n")
+    parse_result(Path("results.xml"))
+    print("Edit Mode Tests: \n")
+    parse_result(Path("results_edit_mode.xml"))
+else: # Gracefully handle failed run
+    print("tests failed to run")
