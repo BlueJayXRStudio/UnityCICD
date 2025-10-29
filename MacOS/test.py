@@ -28,6 +28,7 @@ def parse_result(path):
         for test in root.iter("test-case"):
             if test.attrib.get("result") == "Failed":
                 print("Failed test:", test.attrib.get("fullname", "(unknown)"))
+        print('\n')
         if result == "Passed":
             return 0
     return 1
