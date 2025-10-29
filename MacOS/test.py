@@ -1,6 +1,7 @@
 import subprocess
 import xml.etree.ElementTree as ET
 from pathlib import Path
+import sys
 
 def parse_result(path):
     if not path.exists():
@@ -27,6 +28,9 @@ def parse_result(path):
         for test in root.iter("test-case"):
             if test.attrib.get("result") == "Failed":
                 print("Failed test:", test.attrib.get("fullname", "(unknown)"))
+        if result == "Passed":
+            return 0
+    return 1
 
 result = subprocess.run(
     ["/usr/bin/env", "bash", "test"],
@@ -38,8 +42,11 @@ result = subprocess.run(
 if result.returncode == 0:
     print("tests ran successfully\n")
     print("Play Mode Tests: \n")
-    parse_result(Path("results.xml"))
+    result1 = parse_result(Path("results.xml"))
     print("Edit Mode Tests: \n")
-    parse_result(Path("results_edit_mode.xml"))
+    result2 = parse_result(Path("results_edit_mode.xml"))
+    if result1 == 0 and result2 == 0:
+        sys.exit(0)
 else: # Gracefully handle failed run
     print("tests failed to run")
+sys.exit(1)
