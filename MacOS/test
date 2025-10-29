@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# -------------------------------------------------------------------
+# remember to chmod +x test
+# or use "bash test"
+# -------------------------------------------------------------------
+
+# Clean up past test results
+rm -f results.xml
+rm -f results_edit_mode.xml
+rm -f Editor.log
+rm -f Editor_edit_mode.log
+
+echo "Starting test runners"
+
+# Exit immediately on error or unset variable
+source ../paths.env
+set -euo pipefail
+
+# Check that the environment variables are set
+if [ -z "${UNITY_PATH:-}" ]; then
+  echo "UNITY_PATH environment variable not set."
+  echo "Example: export UNITY_PATH='/Applications/Unity/Hub/Editor/2022.3.9f1/Unity.app/Contents/MacOS/Unity'"
+  exit 1
+fi
+
+if [ -z "${PROJECT_PATH:-}" ]; then
+  echo "PROJECT_PATH environment variable not set."
+  echo "Example: export PROJECT_PATH='/Users/username/MyUnityProject'"
+  exit 1
+fi
+
+# Optional: Output paths for clarity
+echo "Using Unity from: $UNITY_PATH"
+echo "Project path: $PROJECT_PATH"
+echo
+
+# Run Unity in batch mode with PlayMode tests
+"$UNITY_PATH" \
+  -batchmode \
+  -projectPath "$PROJECT_PATH" \
+  -runTests -testPlatform PlayMode \
+  -testResults "$(pwd)/results.xml" \
+  -logFile "$(pwd)/Editor.log"
+
+# Capture exit code
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "Unity tests failed with exit code $EXIT_CODE."
+  exit 1
+fi
+echo
+echo "PlayMode test successful"
+
+# Run Unity in batch mode with PlayMode tests
+"$UNITY_PATH" \
+  -batchmode \
+  -projectPath "$PROJECT_PATH" \
+  -runTests -testPlatform EditMode \
+  -testResults "$(pwd)/results_edit_mode.xml" \
+  -logFile "$(pwd)/Editor_edit_mode.log"
+
+# Capture exit code
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "Unity tests failed with exit code $EXIT_CODE."
+  exit 1
+fi
+echo
+echo "EditMode test successful"
+exit 0
