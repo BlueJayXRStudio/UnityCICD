@@ -2,3 +2,5 @@
 *.env
 *.xml
 *.log
+[Bb]uild/
+[Bb]uilds/

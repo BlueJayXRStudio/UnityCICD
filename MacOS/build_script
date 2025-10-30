@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+source ../paths.env
+
+rm -rf builds
+mkdir builds
+
+"$UNITY_PATH" \
+  -batchmode -quit \
+  -projectPath "$PROJECT_PATH" \
+  -executeMethod MacOSServerBuildCommand.BuildMacServer \
+  buildPath="$(pwd)/builds/server_app" \
+
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+  echo "Unity build failed with exit code $EXIT_CODE."
+  exit 1
+else
+  echo "Unity build completed."
+  exit 0
+fi
