@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using System;
 using System.IO;
+using UnityEditor.Build;
 
 /// <summary>
 /// Must be stored under Assets/Editor
@@ -27,12 +28,21 @@ public static class MacOSServerBuildCommand
             scenes = scenes,
             locationPathName = buildPath,
             target = BuildTarget.StandaloneOSX,
-            options = BuildOptions.EnableHeadlessMode
+            subtarget = (int)StandaloneBuildSubtarget.Server
         };
 
-        // Ensure it's built as a headless (dedicated) server
-        EditorUserBuildSettings.standaloneBuildSubtarget = StandaloneBuildSubtarget.Server;
+        bool switched = EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneOSX);
+        if (!switched)
+        {
+            Console.WriteLine("Failed to switch to macOS build target. Check if macOS build support is installed.");
+            return;
+        }
 
+        // Set scripting backend to IL2CPP
+        PlayerSettings.SetScriptingBackend(NamedBuildTarget.Server, ScriptingImplementation.IL2CPP);
+        // Set architecture to ARM64
+        PlayerSettings.SetArchitecture(BuildTargetGroup.Standalone, 1); // 0 = x86_64 (Intel), 1 = ARM64 (Apple Silicon)
+        
         // Perform the build
         var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
 

@@ -35,7 +35,7 @@ def parse_result(path):
 
 result = subprocess.run(
     ["/usr/bin/env", "bash", "test"],
-    capture_output=True,
+    # capture_output=True,
     # check=True,
     text=True
 )

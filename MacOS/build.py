@@ -3,7 +3,7 @@ import sys
 
 result = subprocess.run(
     ["python3", "test.py"],
-    capture_output=True,
+    # capture_output=True,
     # check=True,
     text=True
 )
@@ -11,7 +11,7 @@ result = subprocess.run(
 if result.returncode == 0:
     result = subprocess.run(
         ["/usr/bin/env", "bash", "build_script"],
-        capture_output=True,
+        # capture_output=True,
         # check=True,
         text=True
     )

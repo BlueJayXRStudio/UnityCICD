@@ -5,6 +5,9 @@ source ../paths.env
 rm -rf builds
 mkdir builds
 
+echo
+echo "Starting Unity build..."
+
 "$UNITY_PATH" \
   -batchmode -quit \
   -projectPath "$PROJECT_PATH" \
