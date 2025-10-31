@@ -1,3 +1,4 @@
+# WIP: Integrating Android build and automatic deploy to Meta Horizon alpha channel
 import subprocess
 
 # Please run from this directory
