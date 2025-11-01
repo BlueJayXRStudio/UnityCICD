@@ -30,15 +30,15 @@ if [ -z "${UNITY_PATH:-}" ]; then
   exit 1
 fi
 
-if [ -z "${PROJECT_PATH_MACOS:-}" ]; then
-  echo "PROJECT_PATH_MACOS environment variable not set."
-  echo "Example: export PROJECT_PATH_MACOS='/Users/username/MyUnityProject'"
+if [ -z "${PROJECT_PATH_ANDROID:-}" ]; then
+  echo "PROJECT_PATH_ANDROID environment variable not set."
+  echo "Example: export PROJECT_PATH_ANDROID='/Users/username/MyUnityProject'"
   exit 1
 fi
 
 # Optional: Output paths for clarity
 echo "Using Unity from: $UNITY_PATH"
-echo "Project path: $PROJECT_PATH_MACOS"
+echo "Project path: $PROJECT_PATH_ANDROID"
 
 # Pull from origin/main
 CURRENT_DIRECTORY="$(pwd)"
@@ -49,7 +49,7 @@ echo
 echo "switching from:"
 echo "$CURRENT_DIRECTORY"
 
-cd "$PROJECT_PATH_MACOS"
+cd "$PROJECT_PATH_ANDROID"
 
 echo
 echo "switched to:"
@@ -79,7 +79,7 @@ echo "Starting test runners"
 # Run Unity in batch mode with PlayMode tests
 "$UNITY_PATH" \
   -batchmode \
-  -projectPath "$PROJECT_PATH_MACOS" \
+  -projectPath "$PROJECT_PATH_ANDROID" \
   -runTests -testPlatform PlayMode \
   -testResults "$(pwd)/logs/results.xml" \
   -logFile "$(pwd)/logs/Editor.log"
@@ -97,7 +97,7 @@ echo "PlayMode test successful"
 # Run Unity in batch mode with PlayMode tests
 "$UNITY_PATH" \
   -batchmode \
-  -projectPath "$PROJECT_PATH_MACOS" \
+  -projectPath "$PROJECT_PATH_ANDROID" \
   -runTests -testPlatform EditMode \
   -testResults "$(pwd)/logs/results_edit_mode.xml" \
   -logFile "$(pwd)/logs/Editor_edit_mode.log"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ../paths.env
+source ../envs/paths.env
 
 rm -rf builds
 mkdir builds
@@ -10,7 +10,7 @@ echo "Starting Unity build..."
 
 "$UNITY_PATH" \
   -batchmode -quit \
-  -projectPath "$PROJECT_PATH" \
+  -projectPath "$PROJECT_PATH_MACOS" \
   -executeMethod MacOSServerBuildCommand.BuildMacServer \
   buildPath="$(pwd)/builds/server_app" \
 
