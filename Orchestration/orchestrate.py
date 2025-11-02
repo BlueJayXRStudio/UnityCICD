@@ -3,7 +3,7 @@ import subprocess
 
 # Please run from this directory
 result = subprocess.run(
-    ["python3", "build.py"],
+    ["python", "build.py"],
     # capture_output=True,
     # check=True,
     text=True,

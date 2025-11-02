@@ -2,7 +2,7 @@ import subprocess
 import sys
 
 result = subprocess.run(
-    ["python3", "test.py"],
+    ["python", "test.py"],
     # capture_output=True,
     # check=True,
     text=True
