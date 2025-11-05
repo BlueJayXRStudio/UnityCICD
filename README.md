@@ -2,7 +2,9 @@
 
 > *Tested on Apple Silicon with python 3.13.7*
 
-> Currently working on automating version and patch-notes injection.
+> Currently working on:
+> - automating version and patch-notes injection.
+> - DAG scheduler
 
 > Documentation for environment setup coming soon. However, this is still a working prototype minus the Android build script on the Unity's side (MacOS server build script is available as a sample template, See [`MacOSServerBuildCommand.cs`](./SampleEditorBuildScripts/MacOSServerBuildCommand.cs)).
 
