@@ -1,13 +1,13 @@
 import sys, os, _bootstrap
 import subprocess, threading, time
 from Tools.path_tools import PathResolveNormalizer
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PARENT_DIR = os.path.dirname(BASE_DIR)
-WORKFLOW_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "workflows")
 import yaml
 from collections import defaultdict, deque
 from Orchestration.check_cycles import CheckCycles
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PARENT_DIR = os.path.dirname(BASE_DIR)
+WORKFLOW_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "workflows")
 path_resolver = PathResolveNormalizer(BASE_DIR)
 project_resolver = PathResolveNormalizer(PARENT_DIR)
 workflow_path_resolver = PathResolveNormalizer(WORKFLOW_DIR)
@@ -42,7 +42,6 @@ for job in config['jobs'].items():
         graph_reversed[dependency].add(job_name)
         in_degree_reversed[job_name] += 1
 
-
 cycle_detector = CheckCycles(in_degree, graph)
 
 no_cycles, topo_sorted = cycle_detector.check_cycles()
@@ -51,8 +50,6 @@ print(topo_sorted)
 
 if not no_cycles:
     sys.exit(1)
-
-
 
 ### RUN JOBS ###
 MAX_PARALLEL_JOBS = 2
@@ -65,37 +62,47 @@ for node, degree in in_degree_reversed.items():
 lock = threading.Lock()
 cond = threading.Condition(lock)
 _count = 0
+_stop = False
 
 def worker():
     global _count
+    global _stop
+
     while True:
         with cond:
-            while not queue:
+            while not queue and _count < len(in_degree_reversed) and not _stop:
                 print("Waiting for a job...")
                 cond.wait()
-                if _count == len(in_degree_reversed):
-                    return
-                
-            job_name = queue.popleft()
-            print(job_name)
+            if _count != len(in_degree_reversed) and not _stop:
+                job_name = queue.popleft()
+                print(job_name)
 
-            components = config['jobs'][job_name]['run'][0].split()
-            rel_path = config['jobs'][job_name]['run'][0].split()[-1]
-            resolved_path = project_resolver.resolved(rel_path)
-            components[-1] = resolved_path
+                components = config['jobs'][job_name]['run'][0].split()
+                rel_path = config['jobs'][job_name]['run'][0].split()[-1]
+                resolved_path = project_resolver.resolved(rel_path)
+                components[-1] = resolved_path
+            else:
+                return
 
+        # run subprocess outside condition to release the lock for other threads
         result = subprocess.run(components, capture_output=True, text=True)
         print(result.stdout)
-        # if result.returncode == 0:
+
         with cond:
-            _count += 1
-            for dependent in graph_reversed[job_name]:
-                in_degree_reversed[dependent] -= 1
-                if in_degree_reversed[dependent] == 0:
-                    queue.append(dependent)
-                    cond.notify()
-            
-            if _count == len(in_degree_reversed):
+            if _stop:
+                return
+            if result.returncode == 0:
+                _count += 1
+                for dependent in graph_reversed[job_name]:
+                    in_degree_reversed[dependent] -= 1
+                    if in_degree_reversed[dependent] == 0:
+                        queue.append(dependent)
+                        cond.notify()
+                if _count == len(in_degree_reversed):
+                    cond.notify_all()
+                    return
+            else:
+                _stop = True
                 cond.notify_all()
                 return
 
@@ -103,4 +110,6 @@ threads = [threading.Thread(target=worker) for _ in range(MAX_PARALLEL_JOBS)]
 for t in threads: t.start()
 for t in threads: t.join()
 
+if _stop:
+    sys.exit(1)
 sys.exit(0)
