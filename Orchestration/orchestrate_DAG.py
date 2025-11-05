@@ -111,5 +111,7 @@ for t in threads: t.start()
 for t in threads: t.join()
 
 if _stop:
+    print("Workflow Unsuccessful.")
     sys.exit(1)
+print("Workflow Successful.")
 sys.exit(0)
