@@ -11,6 +11,7 @@ from asyncio import Queue
 from Tools.path_tools import PathResolveNormalizer
 from Tools.DAG.DAG_creator import DAGCreator
 from Tools.config_getter import ConfigGetter
+from Tools.logging.run_logger import RunLogger
 import webbrowser
 from collections import defaultdict, deque
 import sqlite3, json
@@ -37,6 +38,12 @@ print("No cycles detected" if no_cycles else "Cycles detected")
 # Exit if cycles detected
 if not no_cycles:
     sys.exit(1)
+
+### FOR RUN LOGGING ###
+run_logger = RunLogger(base_resolver.resolved("db/runs.sqlite"), base_resolver.resolved("blobs"))
+run_logger.init_db_blob()
+run_logger.save()
+quit()
 
 ### FOR PYVIS ###
 TEMPLATE_DIR = base_resolver.resolved("templates")
@@ -119,9 +126,24 @@ async def return_logs(log_name: str, request: Request):
     content = "".join(LOGS[f"{log_name}"])
     return Response(content, media_type="text/plain")
 
+success = 0
 async def push_update_to_clients():
     while True:
         node, status = await message_queue.get()
+        success += int(status == "success")
+        if success == len(NODES):
+            # record run
+            run_logger.graph_data = {
+                "NODES": NODES,
+                "EDGES": EDGES,
+                "LEVELS": LEVELS,
+                "STATUS": STATUS,
+                "LOGS": LOGS
+            }
+        if status == "failure":
+            # record run
+            pass
+
         STATUS[node] = status
         node_data, edge_data = build_graph()
 
@@ -265,7 +287,7 @@ async def start_workflow():
     # for t in threads: t.join() # If this were NOT a web app, you'd ideally join before terminating.
 
 async def open_browser():
-    url = "http://localhost:8100"
+    url = "http://0.0.0.0:8100"
     webbrowser.open(url)
 
 @app.on_event("startup")
@@ -283,5 +305,5 @@ if __name__ == "__main__":
     # Use Uvicorn or Gunicorn...
     
     # uvicorn.run(app, host="0.0.0.0", port=8100, reload=False) # for local network access, bind to all interfaces
-    uvicorn.run(app, host="localhost", port=8100, reload=False) 
+    uvicorn.run(app, host="0.0.0.0", port=8100, reload=False) 
 
