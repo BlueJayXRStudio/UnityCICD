@@ -1,22 +1,49 @@
 .DS_Store
-*.env
+
+# Logs
 *.xml
 *.log
 
+# Media files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.mp4
+*.mov
+
+# Unignore media for docs
+!docs/media/
+!docs/media/**
+
+# Ignore byte compiled files
 __pycache__/
 .pytest_cache/
 
+# Ignore venv
 [Vv]env/
 
-[Ee]nv/
-[Ee]nvs/
-
+# Match all possible log and build artifact directories
 [Bb]uild/
 [Bb]uilds/
 [Ll]og/
 [Ll]ogs/
 
-[Pp]latformTools/
-[Ss]ketches/
+# Ignore run DB and Blobs directories
 [Dd]b/
 [Bb]lobs/
+
+# Ignore misc.
+[Pp]latformTools/
+[Ss]ketches/
+
+
+########################################################################
+# DON'T PUT ANYTHING ELSE BELOW HERE
+# IGNORE ALL DIRECTORIES THAT MAY CONTAIN A COLLECTION OF ENV FILES
+[Ee]nv/
+[Ee]nvs/
+# IGNORE ENV FILES
+# KEEP THIS PATTERN AT THE END TO ENSURE IT'S THE LAST MATCHING PATTERN
+*.env

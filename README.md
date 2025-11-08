@@ -1,15 +1,45 @@
-# Unity CICD
+# ~~Unity~~ General CICD
+*Originally a lightweight Unity CI pipeline, turned into a general purpose DAG orchestration framework.*
 
 > *Tested on Apple Silicon with python 3.13.9 (brew installed)*
 
-Fully parallel DAG scheduler implemented here: [`orchestrate_DAG.py`](./Orchestration/orchestrate_DAG.py) 
+<p align="center">
+  <video src="docs/media/ConsoleOutput.mp4" height="300" autoplay loop muted playsinline></video>
+</p>
 
-The same DAG scheduler with interactive web visualizer with live logging: [`app.py`](./Orchestration/app.py) 
+## How to run:
+```bash
+# assuming we're at project root
+python Orchestration/app.py
+```
 
-Currently working on:
-- automating version and patch-notes injection.
+This will launch a tkinter file dialog. Select any of the YAML workflow configs in Orchestration/demo. It will launch the backend, start the workflow, and open a browser to the frontend at localhost:8200. You can bind the backend to all interfaces if you want to access it from another device; it works great.
 
-Documentation for environment setup coming soon. However, this is still a working prototype minus the Android build script on the Unity's side (MacOS server build script is available as a sample template, See [`MacOSServerBuildCommand.cs`](./SampleEditorBuildScripts/MacOSServerBuildCommand.cs)).
+## Features
+### Console Output Per Node
+<p align="center">
+  <video src="docs/media/ConsoleOutput.mp4" height="480" controls></video>
+</p>
+
+### Terminates Workflow On Single Failure
+<p align="center">
+  <video src="docs/media/Failure.mp4" height="480" controls></video>
+</p>
+
+### Parallel Worker Threads (5 workers in the video)
+<p align="center">
+  <video src="docs/media/Parallel.mp4" height="480" controls></video>
+</p>
+
+
+
+Single run DAG scheduler: [`orchestrate_DAG.py`](./Orchestration/orchestrate_DAG.py) 
+
+DAG scheduler with interactive web visualization and live console output: [`app.py`](./Orchestration/app.py) 
+
+Currently working on (Unity Side):
+- automating version bump and patch-notes update for Unity builds.
+- Documentation for environment setup coming soon. However, this is still a working prototype minus the Android build script on the Unity's side (MacOS server build script is available as a sample template, See [`MacOSServerBuildCommand.cs`](./SampleEditorBuildScripts/MacOSServerBuildCommand.cs)).
 
 ## Design Philosophies:
 
