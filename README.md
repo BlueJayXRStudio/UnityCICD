@@ -4,7 +4,7 @@
 > *Tested on Apple Silicon with python 3.13.9 (brew installed)*
 
 <p align="center">
-  <video src="docs/media/ConsoleOutput.mp4" height="300" autoplay loop muted playsinline></video>
+  <img src="docs/media/ConsoleOutput.gif" height="300" controls></img>
 </p>
 
 ## How to run:
@@ -18,27 +18,28 @@ This will launch a tkinter file dialog. Select any of the YAML workflow configs 
 ## Features
 ### Console Output Per Node
 <p align="center">
-  <video src="docs/media/ConsoleOutput.mp4" height="480" controls></video>
+  <img src="docs/media/ConsoleOutput.gif" height="480" controls></img>
 </p>
 
 ### Terminates Workflow On Single Failure
 <p align="center">
-  <video src="docs/media/Failure.mp4" height="480" controls></video>
+  <img src="docs/media/Failure.gif" height="480" controls></img>
 </p>
 
-### Parallel Worker Threads (5 workers in the video)
+### Parallel Worker Threads (5 workers in the gif)
 <p align="center">
-  <video src="docs/media/Parallel.mp4" height="480" controls></video>
+  <img src="docs/media/Parallel.gif" height="480" controls></img>
 </p>
 
+### Additional Info:
+- Runs logged under Orchestration/db and Orchestration/blob
+- Cyclic dependencies will be detected and will terminate workflow
+- DAG scheduler standalone script: [`orchestrate_DAG.py`](./Orchestration/orchestrate_DAG.py) 
+- DAG scheduler with interactive web visualization and live console output: [`app.py`](./Orchestration/app.py) 
 
-
-Single run DAG scheduler: [`orchestrate_DAG.py`](./Orchestration/orchestrate_DAG.py) 
-
-DAG scheduler with interactive web visualization and live console output: [`app.py`](./Orchestration/app.py) 
-
-Currently working on (Unity Side):
-- automating version bump and patch-notes update for Unity builds.
+## Unity Stuff
+Currently working on:
+- Automating version bump and patch-notes update for Unity builds.
 - Documentation for environment setup coming soon. However, this is still a working prototype minus the Android build script on the Unity's side (MacOS server build script is available as a sample template, See [`MacOSServerBuildCommand.cs`](./SampleEditorBuildScripts/MacOSServerBuildCommand.cs)).
 
 ## Design Philosophies:
