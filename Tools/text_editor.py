@@ -9,7 +9,7 @@ import subprocess
 class TextEditor:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("800x600")
+        self.root.geometry("400x600")
 
         self.file_path = None  # keep track of the currently open file
         self._reset_title()
