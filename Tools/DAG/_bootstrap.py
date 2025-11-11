@@ -12,7 +12,18 @@ while True:
     if next == current:
         sys.exit(1)
     current = next
-sys.path = [p for p in sys.path if "/venv" in p or os.path.commonpath([project_root, os.path.abspath(p)]) != project_root]
+
+def safe_commonpath(paths):
+    try:
+        return os.path.commonpath(paths)
+    except ValueError:
+        return None
+
+sys.path = [
+    p for p in sys.path if 
+    ("venv" in p and "site-packages" in p) or 
+    safe_commonpath([project_root, os.path.abspath(p)]) != project_root
+]
 sys.path.append(project_root)
 
 from Tools.path_tools import PathResolveNormalizer
