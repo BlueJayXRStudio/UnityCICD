@@ -14,7 +14,7 @@ OCULUS_APP_SECRET = os.getenv("OCULUS_APP_SECRET")
 OCULUS_PLATFORM_TOOL_PATH = os.getenv("OCULUS_PLATFORM_TOOL_PATH")
 
 result = subprocess.run(
-    ["python", os.path.join(BASE_DIR, "build.py")],
+    [sys.executable, os.path.join(BASE_DIR, "build.py")],
     # capture_output=True,
     # check=True,
     text=True

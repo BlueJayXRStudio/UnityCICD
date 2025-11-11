@@ -3,7 +3,7 @@ import sys, os, _bootstrap
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 result = subprocess.run(
-    ["python", os.path.join(BASE_DIR, "test.py")],
+    [sys.executable, os.path.join(BASE_DIR, "test.py")],
     # capture_output=True,
     # check=True,
     text=True

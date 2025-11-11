@@ -9,7 +9,7 @@ load_dotenv(os.path.join(PARENT_DIR, "envs/paths.env"))
 adb_path = os.getenv("ADB_PATH")
 
 result = subprocess.run(
-    ["python", os.path.join(BASE_DIR, "build.py")],
+    [sys.executable, os.path.join(BASE_DIR, "build.py")],
     # capture_output=True,
     # check=True,
     text=True

@@ -13,7 +13,7 @@ class ConfigGetter:
         self.workflow = None
 
         # Open file dialog to retrieve workflow config
-        result = subprocess.run(["python", base_resolver.resolved("filedialog.py")], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, base_resolver.resolved("filedialog.py")], capture_output=True, text=True)
         if result.returncode == 0:
             self.workflow = result.stdout.strip()
             # Open config
