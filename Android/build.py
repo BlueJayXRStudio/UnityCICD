@@ -3,6 +3,14 @@ import sys, os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
+result = subprocess.run(
+    ["/usr/bin/env", "bash", os.path.join(BASE_DIR, "pull_repo")],
+    # capture_output=True,
+    # check=True,
+    text=True
+)
+
 result = subprocess.run(
     [sys.executable, os.path.join(BASE_DIR, "test.py")],
     # capture_output=True,

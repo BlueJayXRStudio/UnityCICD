@@ -49,15 +49,16 @@ echo
 echo "Starting test runners"
 
 # Run Unity in batch mode with PlayMode tests
+set +e
 "$UNITY_PATH" \
   -batchmode \
   -projectPath "$PROJECT_PATH_MACOS" \
   -runTests -testPlatform PlayMode \
   -testResults "$LOGS_DIR/results.xml" \
   -logFile "$LOGS_DIR/Editor.log"
-
 # Capture exit code
 EXIT_CODE=$?
+set -e
 
 if [ $EXIT_CODE -ne 0 ]; then
   echo "Unity tests failed with exit code $EXIT_CODE."
@@ -66,16 +67,17 @@ fi
 echo
 echo "PlayMode test successful"
 
-# Run Unity in batch mode with PlayMode tests
+# Run Unity in batch mode with EditMode tests
+set +e
 "$UNITY_PATH" \
   -batchmode \
   -projectPath "$PROJECT_PATH_MACOS" \
   -runTests -testPlatform EditMode \
   -testResults "$LOGS_DIR/results_edit_mode.xml" \
   -logFile "$LOGS_DIR/Editor_edit_mode.log"
-
 # Capture exit code
 EXIT_CODE=$?
+set -e
 
 if [ $EXIT_CODE -ne 0 ]; then
   echo "Unity tests failed with exit code $EXIT_CODE."
