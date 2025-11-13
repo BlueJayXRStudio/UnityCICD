@@ -1,8 +1,13 @@
 jobs:
+  test_orchestrator:
+    run:
+      - /usr/bin/env bash tests/run_pytest
+    needs: []
+
   pull_macos:
     run: 
       - /usr/bin/env bash MacOS/pull_repo
-    needs: []
+    needs: [test_orchestrator]
 
   test_macos:
     run: 
@@ -17,7 +22,7 @@ jobs:
   pull_android:
     run: 
       - /usr/bin/env bash Android/pull_repo
-    needs: []
+    needs: [test_orchestrator]
 
   test_android:
     run:

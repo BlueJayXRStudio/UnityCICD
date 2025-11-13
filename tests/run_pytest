@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+SCRIPT_PATH="$(realpath "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+CURRENT_DIRECTORY="$(pwd)"
+cd "$PROJECT_ROOT"
+pytest
+EXIT_CODE=$?
+if [ $EXIT_CODE -ne 0 ]; then
+  cd "$CURRENT_DIRECTORY"
+  echo "$(pwd)"
+  echo "Pytest failed with exit code: $EXIT_CODE."
+  exit 1
+else
+  cd "$CURRENT_DIRECTORY"
+  echo "$(pwd)"
+  echo "Pytest successful."
+  exit 0
+fi
+

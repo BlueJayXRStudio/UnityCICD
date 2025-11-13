@@ -36,7 +36,7 @@ __pycache__/
 [Bb]lobs/
 
 # Ignore misc.
-[Pp]atch[Nn]otes/
+store_deployment_data/
 [Pp]latformTools/
 [Ss]ketches/
 

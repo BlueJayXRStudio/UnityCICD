@@ -25,9 +25,6 @@ class DAGCreator:
         return NODES, EDGES
 
     def get_levels(self) -> dict[str, int]:
-        ### Figure out stages/levels for prettier graph visualization   ###
-        # This has no bearing on the actual runtime algorithm, which      #
-        # is dynamic and parallel. Will factor em out in the near future. #
         level_tracking = self.in_degree_reversed.copy() # shallow copy
         LEVELS = self.in_degree_reversed.copy() # shallow copy
 
