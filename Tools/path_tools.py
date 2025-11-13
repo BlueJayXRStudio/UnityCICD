@@ -15,6 +15,7 @@ def scandirs(dir):
             yield path
 
 class PathResolveNormalizer:
+    """ Resolves first then normalizes """
     def __init__(self, root):
         self.root = root
 
