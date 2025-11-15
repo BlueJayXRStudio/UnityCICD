@@ -2,7 +2,7 @@
 Simple indentation formatter
 """
 
-def indentation_formatter(text, tab_size=3, max_budget=29):
+def indentation_formatter(text, tab_size=2, max_budget=30):
     """
     AI can't write this.
     """
@@ -56,19 +56,33 @@ def indentation_formatter(text, tab_size=3, max_budget=29):
     return ''.join(parsed)
 
 if __name__ == "__main__":
-    text = """
-Hello world! How are you doing today! I am going to tell you all about my favorite ice cream flavors. For no reason what so ever!
-	- My favorite ice cream flavors:
-		- Chocolate
-		- Mint 										Chocolate Chip (We just added a buncha tabs there)
-		- Rocky Road
-			- sort of
-		- Vanilla
-		- Strawberry
-		- Okay I guess I like everything then
-    
-    - Now we're indenting by 4-spaces 
-        - Again...
-            - And again.........
-"""
-    print(indentation_formatter(text))
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path", help="path to file to parse")
+    parser.add_argument(
+        "--tab_size",
+        type=int,
+        default=2,
+        help="number of white spaces for tabs"
+    )
+    parser.add_argument(
+        "--max_budget",
+        type=int,
+        default=30,
+        help="max number of characters per line"
+    )
+    args = parser.parse_args()
+
+    assert args.path != ""
+    assert args.tab_size > 0
+    assert args.max_budget > 0
+
+    with open(args.path, 'r') as f:
+        print(
+            indentation_formatter(
+                f.read(),
+                args.tab_size,
+                args.max_budget
+            )
+        )
