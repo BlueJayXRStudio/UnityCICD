@@ -31,7 +31,7 @@ class PathTools:
     def join(self, path):
         return PathTools(os.path.join(self.path, path))
     
-    def join_path(self, _path_tools: PathTools):
+    def join_path(self, _path_tools):
         return PathTools(os.path.join(self.path, _path_tools.path))
 
     def parent(self):
