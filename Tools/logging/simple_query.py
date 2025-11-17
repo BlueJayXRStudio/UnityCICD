@@ -4,7 +4,7 @@ import sqlite3
 if len(sys.argv) <= 1:
     sys.exit(1)
 
-conn = sqlite3.connect(_bootstrap.project_resolver.resolved("Orchestration/db/runs.sqlite"))
+conn = sqlite3.connect(_bootstrap.project_resolver.preview_join_resolved("Orchestration/db/runs.sqlite"))
 c = conn.cursor()
 
 c.execute(

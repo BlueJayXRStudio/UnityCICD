@@ -8,7 +8,7 @@ import requests
 from pyvis.network import Network
 import asyncio
 from asyncio import Queue
-from Tools.path_tools import PathResolveNormalizer
+from Tools.path_tools import PathTools
 from Tools.DAG.DAG_creator import DAGCreator
 from Tools.config_getter import ConfigGetter
 from Tools.logging.run_logger import RunLogger
@@ -18,8 +18,8 @@ import sqlite3, json
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-base_resolver = PathResolveNormalizer(BASE_DIR)
-project_resolver = PathResolveNormalizer(_bootstrap.project_root)
+base_resolver = PathTools(BASE_DIR)
+project_resolver = PathTools(_bootstrap.project_root)
 
 if len(sys.argv) <= 1:
     sys.exit(1)
@@ -27,11 +27,11 @@ if len(sys.argv) <= 1:
 blob_uuid = sys.argv[1]
 
 ### FOR RUN VISUALIZATION ###
-run_logger = RunLogger(base_resolver.resolved("db/runs.sqlite"), base_resolver.resolved("blobs"))
+run_logger = RunLogger(base_resolver.preview_join_resolved("db/runs.sqlite"), base_resolver.preview_join_resolved("blobs"))
 run_logger.load(blob_uuid)
 
 ### FOR PYVIS ###
-TEMPLATE_DIR = base_resolver.resolved("templates")
+TEMPLATE_DIR = base_resolver.preview_join_resolved("templates")
 templates = Jinja2Templates(directory=TEMPLATE_DIR)
 '''
 NODES: list[str]

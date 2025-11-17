@@ -20,4 +20,4 @@ answer = "\nHello world! How are you doin-\ng today! I am going to tell y-\nou a
 
 @pytest.mark.parser_test
 def test_indentation_formatter():
-    assert indentation_formatter(text) == answer
+    assert indentation_formatter(text, tab_size=3, max_budget=29) == answer

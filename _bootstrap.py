@@ -26,5 +26,5 @@ sys.path = [
 ]
 sys.path.append(project_root)
 
-from Tools.path_tools import PathResolveNormalizer
-project_resolver = PathResolveNormalizer(project_root)
+from Tools.path_tools import PathTools
+project_resolver = PathTools(project_root)

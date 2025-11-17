@@ -1,11 +1,11 @@
 import sys, os, _bootstrap
 import subprocess
-from Tools.path_tools import PathResolveNormalizer
+from Tools.path_tools import PathTools
 import yaml
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-base_resolver = PathResolveNormalizer(BASE_DIR)
-project_resolver = PathResolveNormalizer(_bootstrap.project_root)
+base_resolver = PathTools(BASE_DIR)
+project_resolver = PathTools(_bootstrap.project_root)
 
 class ConfigGetter:
     def __init__(self):
@@ -13,7 +13,7 @@ class ConfigGetter:
         self.workflow = None
 
         # Open file dialog to retrieve workflow config
-        result = subprocess.run([sys.executable, base_resolver.resolved("filedialog.py")], capture_output=True, text=True)
+        result = subprocess.run([sys.executable, base_resolver.preview_join_resolved("filedialog.py")], capture_output=True, text=True)
         if result.returncode == 0:
             self.workflow = result.stdout.strip()
             # Open config

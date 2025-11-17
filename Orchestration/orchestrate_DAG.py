@@ -1,6 +1,6 @@
 import sys, os, _bootstrap
 import subprocess, threading, time
-from Tools.path_tools import PathResolveNormalizer
+from Tools.path_tools import PathTools
 import yaml
 from collections import defaultdict, deque
 from Orchestration.check_cycles import CheckCycles
@@ -8,12 +8,12 @@ from Orchestration.check_cycles import CheckCycles
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.dirname(BASE_DIR)
 WORKFLOW_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "workflows")
-path_resolver = PathResolveNormalizer(BASE_DIR)
-project_resolver = PathResolveNormalizer(PARENT_DIR)
-workflow_path_resolver = PathResolveNormalizer(WORKFLOW_DIR)
+path_resolver = PathTools(BASE_DIR)
+project_resolver = PathTools(PARENT_DIR)
+workflow_path_resolver = PathTools(WORKFLOW_DIR)
 
 config = None
-with open(path_resolver.resolved("workflows/full_pipeline_adb_deploy.yml"), "r") as f:
+with open(path_resolver.preview_join_resolved("workflows/full_pipeline_adb_deploy.yml"), "r") as f:
     config = yaml.safe_load(f)
 
 # use for cycles detection
@@ -79,7 +79,7 @@ def worker():
 
                 components = config['jobs'][job_name]['run'][0].split()
                 rel_path = config['jobs'][job_name]['run'][0].split()[-1]
-                resolved_path = project_resolver.resolved(rel_path)
+                resolved_path = project_resolver.preview_join_resolved(rel_path)
                 components[-1] = resolved_path
             else:
                 return
