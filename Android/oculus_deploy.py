@@ -33,7 +33,8 @@ result = subprocess.run(
         "--app-id", OCULUS_APP_ID,
         "--app-secret", OCULUS_APP_SECRET,
         "--channel", "alpha",
-        "--apk", os.path.join(BASE_DIR, "builds/app.apk")
+        "--apk", os.path.join(BASE_DIR, "builds/app.apk"),
+        "--age-group", "TEENS_AND_ADULTS"
     ],
     # capture_output=True,
     # check=True,

@@ -22,4 +22,5 @@ current_store_metadata["bundle_code"] = current_store_metadata["bundle_code"] + 
 with open(base_resolver.preview_join_resolved("store_deployment_data/version_info.yml"), "w") as f: 
     yaml.safe_dump(current_store_metadata, f)
 
+print("Version codes updated!")
 sys.exit(0)

@@ -1,0 +1,50 @@
+jobs:
+  test_orchestrator:
+    run:
+      - /usr/bin/env bash tests/run_pytest
+    needs: []
+
+  pull_macos:
+    run: 
+      - /usr/bin/env bash MacOS/pull_repo
+    needs: [test_orchestrator]
+
+  test_macos:
+    run: 
+      - python MacOS/test.py
+    needs: [pull_macos]
+
+  build_macos:
+    run:
+      - /usr/bin/env bash MacOS/build_script
+    needs: [test_macos]
+
+  pull_android:
+    run: 
+      - /usr/bin/env bash Android/pull_repo
+    needs: [test_orchestrator]
+
+  update_patch_notes:
+    run:
+      - python Android/update_patch_notes.py
+    needs: [pull_android]
+
+  test_android:
+    run:
+      - python Android/test.py
+    needs: [update_patch_notes]
+
+  build_android:
+    run:
+      - python Android/build.py
+    needs: [test_android]
+
+  deploy_android:
+    run:
+      - python Android/oculus_deploy.py
+    needs: [build_android]
+
+  update_store_metadata:
+    run:
+      - python Android/update_store_metadata.py
+    needs: [deploy_android]
